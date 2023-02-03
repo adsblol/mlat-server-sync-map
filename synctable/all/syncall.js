@@ -21,17 +21,18 @@ function search() {
 }
 
 function refresh() {
-        var xhr = new XMLHttpRequest();
-        xhr.onreadystatechange = function() {
-                if (xhr.readyState == 4) {
-                        var stateObj = JSON.parse(xhr.responseText);
-                        rebuildTable(stateObj);
-                }
-        };
+	var xhr = new XMLHttpRequest();
+	xhr.onreadystatechange = function () {
+		if (xhr.readyState == 4) {
+			var stateObj = JSON.parse(xhr.responseText);
+			rebuildTable(stateObj);
+		}
+	};
+	var my_region = "0A"; // FIXME: This should be passed from somewhere else
+	var cachebust = new Date().getTime();
 
-        var cachebust = new Date().getTime();
-        xhr.open("GET", "sync.json?" + cachebust, true);
-        xhr.send();
+	xhr.open("GET", "/api/0/mlat-server/" + my_region + "/sync.json" + cachebust, true);
+	xhr.send();
 }
 
 function rebuildTable(state) {
@@ -43,18 +44,18 @@ function rebuildTable(state) {
 
 	//var grid_icon = CIRCLE;
 
-        var table = document.getElementById("syncstatstable");
-        while (table.firstChild) {
-                table.removeChild(table.firstChild);
-        }
+	var table = document.getElementById("syncstatstable");
+	while (table.firstChild) {
+		table.removeChild(table.firstChild);
+	}
 
-        var receivers = Object.keys(state);
-        receivers.sort();
+	var receivers = Object.keys(state);
+	receivers.sort();
 	// Zip thru the list, build a reference
 	var overall_record = [];
 	var overall_record_r = {};
 	for (var i = 0; i < receivers.length; ++i) {
-                var receiver_state = state[receivers[i]].peers;
+		var receiver_state = state[receivers[i]].peers;
 		var rec_peers = Object.keys(receiver_state); // (Don't need to sort this)
 
 		var status_sum = 0;
@@ -103,34 +104,34 @@ function rebuildTable(state) {
 	}
 
 
-        var header_row = document.createElement('tr');
+	var header_row = document.createElement('tr');
 
-        var header_td = document.createElement('td');
-        header_td.innerHTML = "Receiver Name (" + receivers.length + " total)";
+	var header_td = document.createElement('td');
+	header_td.innerHTML = "Receiver Name (" + receivers.length + " total)";
 	header_td.className = "rec_name_header rec_name_td";
-        header_row.appendChild(header_td);        
+	header_row.appendChild(header_td);
 
-        var header_td = document.createElement('td');
-        header_td.innerHTML = "Health";
+	var header_td = document.createElement('td');
+	header_td.innerHTML = "Health";
 	header_td.className = "peer_count_header peer_count_td";
-        header_row.appendChild(header_td);        
+	header_row.appendChild(header_td);
 
-        var header_td = document.createElement('td');
-        header_td.innerHTML = "Peers";
+	var header_td = document.createElement('td');
+	header_td.innerHTML = "Peers";
 	header_td.className = "peer_count_header peer_count_td";
-        header_row.appendChild(header_td);        
+	header_row.appendChild(header_td);
 
-        var header_td = document.createElement('td');
-        header_td.innerHTML = "Sync statuses";
-        header_row.appendChild(header_td);        
+	var header_td = document.createElement('td');
+	header_td.innerHTML = "Sync statuses";
+	header_row.appendChild(header_td);
 
-        table.appendChild(header_row);
-        
-        for (var i = 0; i < receivers.length; ++i) {
+	table.appendChild(header_row);
 
-                var receiver_state = state[receivers[i]].peers;
+	for (var i = 0; i < receivers.length; ++i) {
+
+		var receiver_state = state[receivers[i]].peers;
 		var rec_peers = Object.keys(receiver_state);
-        	rec_peers.sort();
+		rec_peers.sort();
 
 		var cellstring0 = "";
 		var cellstring1 = "";
@@ -157,7 +158,7 @@ function rebuildTable(state) {
 			} else {
 				cellstring0 += " yellowCircle'";
 			}
-			cellstring0 += " title='"+rec_peers[p]+" : "+syncstate[0]+"'></div>";
+			cellstring0 += " title='" + rec_peers[p] + " : " + syncstate[0] + "'></div>";
 			// state[1] = sync error (usec)
 			// state[1] <= 2.0 = green
 			// state[1] <= 4.0 = yellow
@@ -169,7 +170,7 @@ function rebuildTable(state) {
 			} else {
 				cellstring1 += fudge ? " badCircle'" : " redCircle'";
 			}
-			cellstring1 += " title='"+rec_peers[p]+" : "+syncstate[1]+"'></div>";
+			cellstring1 += " title='" + rec_peers[p] + " : " + syncstate[1] + "'></div>";
 			// state[2] = PPM offset
 			// <= 50  = green
 			// <= 180 = yellow
@@ -181,7 +182,7 @@ function rebuildTable(state) {
 			} else {
 				cellstring2 += fudge ? " badCircle'" : " redCircle'";
 			}
-			cellstring2 += " title='"+rec_peers[p]+" : "+syncstate[2]+"'></div>";
+			cellstring2 += " title='" + rec_peers[p] + " : " + syncstate[2] + "'></div>";
 		}
 		percent = overall_record[i];
 		var status_avg = percent ? (percent / 10) : 0;
@@ -250,9 +251,9 @@ function rebuildTable(state) {
 		rowdata.appendChild(celldata_stat);
 
 		table.appendChild(rowdata);
-        }
+	}
 
-        
+
 	setTimeout(search(), 10);
 
 }

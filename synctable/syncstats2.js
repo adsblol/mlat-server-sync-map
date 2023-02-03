@@ -5,7 +5,7 @@ var my_region;
 function doInit() {
 	my_region = findBaseName(window.location.pathname);
 	// Put this here.  HTML needs to call the text field "searchbar"
-	$( "#searchbar" ).on("keyup", function(ch) {
+	$("#searchbar").on("keyup", function (ch) {
 		// console.log("Keyup: [" + ch.which + "]");
 		if (ch.which == 13) {
 			search();
@@ -52,10 +52,10 @@ function search() {
 		cssDesc: 'down',
 		cssNone: 'unsort'
 	});
-	$( '#syncstatstable' ).data('tablesorter').sortList = [[0,0]];
-	$( '#syncstatstable' ).trigger( 'updateHeaders');
-	$( '#syncstatstable' ).trigger( 'update');
-	$( '#syncstatstable' ).trigger( 'updateCache');
+	$('#syncstatstable').data('tablesorter').sortList = [[0, 0]];
+	$('#syncstatstable').trigger('updateHeaders');
+	$('#syncstatstable').trigger('update');
+	$('#syncstatstable').trigger('updateCache');
 }
 
 
@@ -63,17 +63,17 @@ function refresh() {
 	document.title = "Region " + my_region + " - Sync Stats"
 	$("#REGION").text(my_region);
 
-        var xhr = new XMLHttpRequest();
-        xhr.onreadystatechange = function() {
-                if (xhr.readyState == 4) {
-                        var stateObj = JSON.parse(xhr.responseText);
-                        rebuildTable(stateObj);
-                }
-        };
+	var xhr = new XMLHttpRequest();
+	xhr.onreadystatechange = function () {
+		if (xhr.readyState == 4) {
+			var stateObj = JSON.parse(xhr.responseText);
+			rebuildTable(stateObj);
+		}
+	};
 
-        var cachebust = new Date().getTime();
-        xhr.open("GET", "sync.json?" + cachebust, true);
-        xhr.send();
+	var cachebust = new Date().getTime();
+	xhr.open("GET", "/api/0/mlat-server/" + my_region + "/sync.json" + cachebust, true);
+	xhr.send();
 }
 
 function rebuildTable(state) {
@@ -85,20 +85,20 @@ function rebuildTable(state) {
 
 	//var grid_icon = CIRCLE;
 
-        var table = document.getElementById("syncstatstable");
-        while (table.firstChild) {
-                table.removeChild(table.firstChild);
-        }
+	var table = document.getElementById("syncstatstable");
+	while (table.firstChild) {
+		table.removeChild(table.firstChild);
+	}
 
 
-        var receivers = Object.keys(state);
-        receivers.sort();
+	var receivers = Object.keys(state);
+	receivers.sort();
 	// Zip thru the list, build a reference
 	var overall_record = [];
 	var overall_record_r = {};
 	var ppm = 0;
 	for (var i = 0; i < receivers.length; ++i) {
-                var receiver_state = state[receivers[i]].peers;
+		var receiver_state = state[receivers[i]].peers;
 		var rec_peers = Object.keys(receiver_state); // (Don't need to sort this)
 
 		var status_sum = 0;
@@ -149,44 +149,44 @@ function rebuildTable(state) {
 
 
 	var table_thead = document.createElement('thead');
-        var table_tr = document.createElement('tr');
-        var table_th = document.createElement('th');
+	var table_tr = document.createElement('tr');
+	var table_th = document.createElement('th');
 
-        table_th.innerHTML = "Receiver Name (" + receivers.length + " total)";
+	table_th.innerHTML = "Receiver Name (" + receivers.length + " total)";
 	table_th.className = "rec_name_header rec_name_td";
-        table_tr.appendChild(table_th);        
+	table_tr.appendChild(table_th);
 
-        var table_th = document.createElement('th');
-        table_th.innerHTML = "Health";
+	var table_th = document.createElement('th');
+	table_th.innerHTML = "Health";
 	table_th.className = "peer_count_header peer_count_td string-min";
-        table_tr.appendChild(table_th);        
+	table_tr.appendChild(table_th);
 
-        var table_th = document.createElement('th');
-        table_th.innerHTML = "Timeout";
+	var table_th = document.createElement('th');
+	table_th.innerHTML = "Timeout";
 	table_th.className = "peer_count_header peer_count_td string-min";
-        table_tr.appendChild(table_th);        
+	table_tr.appendChild(table_th);
 
-        var table_th = document.createElement('th');
-        table_th.innerHTML = "Peers";
+	var table_th = document.createElement('th');
+	table_th.innerHTML = "Peers";
 	table_th.className = "peer_count_header peer_count_td";
-        table_tr.appendChild(table_th);        
+	table_tr.appendChild(table_th);
 
-        var table_th = document.createElement('th');
+	var table_th = document.createElement('th');
 	table_th.setAttribute("data-sorter", false);
-        table_th.innerHTML = "Sync statuses";
-        table_tr.appendChild(table_th);        
+	table_th.innerHTML = "Sync statuses";
+	table_tr.appendChild(table_th);
 
-        table_thead.appendChild(table_tr);        
+	table_thead.appendChild(table_tr);
 
-        table.appendChild(table_thead);
-        
+	table.appendChild(table_thead);
+
 	var table_tbody = document.createElement('tbody');
 
-        for (var i = 0; i < receivers.length; ++i) {
+	for (var i = 0; i < receivers.length; ++i) {
 
-                var receiver_state = state[receivers[i]].peers;
+		var receiver_state = state[receivers[i]].peers;
 		var rec_peers = Object.keys(receiver_state);
-        	rec_peers.sort();
+		rec_peers.sort();
 
 		var cellstring0 = "";
 		var cellstring1 = "";
@@ -213,7 +213,7 @@ function rebuildTable(state) {
 			} else {
 				cellstring0 += " yellowCircle'";
 			}
-			cellstring0 += " title='"+rec_peers[p]+" : "+syncstate[0]+"'></div>";
+			cellstring0 += " title='" + rec_peers[p] + " : " + syncstate[0] + "'></div>";
 			// state[1] = sync error (usec)
 			// state[1] <= 2.0 = green
 			// state[1] <= 4.0 = yellow
@@ -225,7 +225,7 @@ function rebuildTable(state) {
 			} else {
 				cellstring1 += fudge ? " badCircle'" : " redCircle'";
 			}
-			cellstring1 += " title='"+rec_peers[p]+" : "+syncstate[1]+"'></div>";
+			cellstring1 += " title='" + rec_peers[p] + " : " + syncstate[1] + "'></div>";
 			// state[2] = PPM offset
 			// <= 50  = green
 			// <= 180 = yellow
@@ -238,12 +238,12 @@ function rebuildTable(state) {
 			} else {
 				cellstring2 += fudge ? " badCircle'" : " redCircle'";
 			}
-			cellstring2 += " title='"+rec_peers[p]+" : "+syncstate[2]+"'></div>";
+			cellstring2 += " title='" + rec_peers[p] + " : " + syncstate[2] + "'></div>";
 		}
 
 		var bad_sync = (state[receivers[i]].bad_syncs != null) ? state[receivers[i]].bad_syncs : 0;
 		percent = overall_record[i];
-		percent = percent * ((6.0-bad_sync)/6.0);
+		percent = percent * ((6.0 - bad_sync) / 6.0);
 		percent = percent.toFixed(1);
 		var status_avg = percent ? (percent / 10) : 0;
 
@@ -252,7 +252,7 @@ function rebuildTable(state) {
 
 		// Receiver
 		var celldata_r = document.createElement('td');
-		celldata_r.innerHTML = '<a href="/sync/feeder.html?'+my_region+'&'+encodeURIComponent(receivers[i])+'" class="rowlink">'+receivers[i]+'</a>';
+		celldata_r.innerHTML = '<a href="/sync/feeder.html?' + my_region + '&' + encodeURIComponent(receivers[i]) + '" class="rowlink">' + receivers[i] + '</a>';
 		celldata_r.className = "rec_name_td";
 		var status_class = "";
 		if (status_avg > 9.5) {
@@ -332,9 +332,9 @@ function rebuildTable(state) {
 		rowdata.appendChild(celldata_stat);
 		table_tbody.appendChild(rowdata);
 
-        }
+	}
 	table.appendChild(table_tbody);
-        
+
 	setTimeout(search(), 10);
 }
 
@@ -348,7 +348,7 @@ function findBaseName(url) {
 	}
 
 	var last_index = url.lastIndexOf("/");
-	var filename = url.substring(last_index+1);
+	var filename = url.substring(last_index + 1);
 
 	return filename;
 }
