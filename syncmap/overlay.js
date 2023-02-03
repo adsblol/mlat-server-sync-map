@@ -64,6 +64,7 @@ function stationKey(regionId, stationId) {
 // Station markers get a different color for each region.
 
 const regionMarkerColors = {
+  "0A": "#8dd3c7",
   "1A": "#8dd3c7",
   "1B": "#1f78b4",
   "1C": "#ff7f00",
@@ -147,7 +148,7 @@ function getRegionsMetadata() {
 function getStationsForRegion(regionInfo) {
   return new Promise((resolve, reject) => {
     const stations = {};
-    var dataUrl = `sync/${regionInfo.region}/sync.json`;
+    var dataUrl = `/api/0/mlat-server/${regionInfo.region}/sync.json`;
     console.log('Loading region data from', dataUrl);
     $.getJSON(dataUrl, data => {
       const region = regionInfo.region;
@@ -288,18 +289,18 @@ function drawLinesToPeers(stationInfo, isEphemeral) {
       if (peer
         && (peer.bad_syncs == null || peer.bad_syncs == 0)
         && (stationInfo.bad_syncs == null || stationInfo.bad_syncs == 0)) {
-          var options;
-          const color = colorForSyncStats(stationInfo.peers[peerId]);
-          if (isEphemeral) {
-            options = { color: color, opacity: 0.3 };
-          } else {
-            options = { color: color, opacity: 0.5 };
-          }
-          const line = lineBetweenStations(stationInfo, peer, options);
-          if (line) {
-            lines.push(line);
-          }
+        var options;
+        const color = colorForSyncStats(stationInfo.peers[peerId]);
+        if (isEphemeral) {
+          options = { color: color, opacity: 0.3 };
+        } else {
+          options = { color: color, opacity: 0.5 };
         }
+        const line = lineBetweenStations(stationInfo, peer, options);
+        if (line) {
+          lines.push(line);
+        }
+      }
     });
     map.removeLayer(stationInfo.marker);
     stationInfo.marker.addTo(map);
@@ -335,9 +336,7 @@ function selectStation(stationInfo) {
   let regionInfo = region ? allRegionInfos.find(ri => ri.region === region) : null;
   if (regionInfo) {
     $('#si-region').text(`${regionInfo.name} (${region})`);
-    const euc = encodeURIComponent;
-    const syncUrl = new URL(`/sync/feeder.html?${euc(region)}&${euc(stationInfo.name)}`, 'https://map.adsbexchange.com/').toString();
-    $('#si-sync-stats-link').attr('href', syncUrl).attr('target', '_blank');
+    $('#si-sync-stats-link').attr('href', "#").attr('target', '_blank');
   } else {
     $('#si-region').text('Unknown');
   }
@@ -436,7 +435,7 @@ async function initialize() {
   // Create map.
   map = L.map('map-canvas');
   L.control.scale({ maxWidth: 100 }).addTo(map);
-  var osm = L.tileLayer('https://map.adsbexchange.com/mapproxy/tiles/1.0.0/osm/osm_grid/{z}/{x}/{y}.png', {
+  var osm = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     attribution: '&#169 <a href="https://www.openstreetmap.org/copyright" target="_blank">OpenStreetMap</a>  contributors.',
     minZoom: 2,
     maxZoom: 17,

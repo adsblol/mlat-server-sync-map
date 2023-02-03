@@ -3,47 +3,49 @@
 var refRefresh;
 
 String.prototype.ppsec = function () {
-	var pad = function(input) {return input < 10 ? "0" + input : input;};
+	var pad = function (input) { return input < 10 ? "0" + input : input; };
 	var sec_num = parseInt(this, 10); // don't forget the second param
-	var hours   = Math.floor(sec_num / 3600);
+	var hours = Math.floor(sec_num / 3600);
 	var minutes = Math.floor((sec_num % 3600) / 60);
 	var seconds = sec_num % 60;
 
 	if (sec_num < 60) {
-		return seconds+"s";
+		return seconds + "s";
 	}
 
-	var r='';
+	var r = '';
 	if (hours > 0) {
-		r = hours+'h ';
+		r = hours + 'h ';
 	}
-	return r+minutes+':'+pad(seconds);
+	return r + minutes + ':' + pad(seconds);
 }
 
 function refresh() {
 	clearInterval(refRefresh);
 	refRefresh = window.setInterval(refresh, 30000);
 
-        var xhr = new XMLHttpRequest();
-        xhr.onreadystatechange = function() {
-                if (xhr.readyState == 4) {
-                        var stateObj = JSON.parse(xhr.responseText);
-                        rebuildTable(stateObj);
-                }
-        };
+	var xhr = new XMLHttpRequest();
+	xhr.onreadystatechange = function () {
+		if (xhr.readyState == 4) {
+			var stateObj = JSON.parse(xhr.responseText);
+			rebuildTable(stateObj);
+		}
+	};
 
-        var cachebust = new Date().getTime();
-        xhr.open("GET", "totalcount.json?" + cachebust, true);
-        xhr.send();
+	var cachebust = new Date().getTime();
+	xhr.open("GET", "/api/0/mlat-server/totalcount?" + cachebust, true);
+	xhr.send();
 
 }
 
 function doInit() {
-	var getconf = $.ajax({ url: 'mirror_regions.json',
-					timeout: 3000,
-					cache: true,
-					dataType: 'json' });
-	getconf.done(function(data) {
+	var getconf = $.ajax({
+		url: 'mirror_regions.json',
+		timeout: 3000,
+		cache: true,
+		dataType: 'json'
+	});
+	getconf.done(function (data) {
 		// We have the JSON in data, walk it and build the initial table...
 		var table = document.getElementById("regiontable");
 		var table_tbody = document.createElement('tbody');
@@ -96,7 +98,7 @@ function doInit() {
 
 function rebuildTable(state) {
 
-        var regions = Object.keys(state);
+	var regions = Object.keys(state);
 	regions.sort();
 
 	var UP = "UPDATED";
@@ -119,7 +121,7 @@ function rebuildTable(state) {
 		second: "2-digit",
 		timeZoneName: "short"
 	}
-	$( "#current_time" ).html( date.toLocaleTimeString("en-US", dateopts) );
+	$("#current_time").html(date.toLocaleTimeString("en-US", dateopts));
 
 	for (var i = 0; i < regions.length; ++i) {
 		region = regions[i];
@@ -133,39 +135,39 @@ function rebuildTable(state) {
 			continue;
 		}
 
-		if ( region.toString() == UP.toString() ) {
-			$( "#updated" ).html( regiondata );
+		if (region.toString() == UP.toString()) {
+			$("#updated").html(regiondata);
 		} else {
 			count = regiondata[0];
 			updated = regiondata[2];
 
-			if ( updated < 100000 ) {
+			if (updated < 100000) {
 				$(ageref).html("* ERROR, no data *");
-				$(ageref).attr( "class", "status_stale" );
+				$(ageref).attr("class", "status_stale");
 			} else {
 				diff = NOW - updated;
 				var ds = diff.toString(10);
 
-				if ( diff > 120) {
-					if ( diff > 240) {
-						if ( diff > 480) {
+				if (diff > 120) {
+					if (diff > 240) {
+						if (diff > 480) {
 							$(ageref).html("STALE (" + ds.ppsec() + " old)");
-							$(ageref).attr( "class", "status_stale480" );
+							$(ageref).attr("class", "status_stale480");
 						} else {
 							$(ageref).html("STALE (" + ds.ppsec() + " old)");
-							$(ageref).attr( "class", "status_stale240" );
+							$(ageref).attr("class", "status_stale240");
 						}
 					} else {
 						$(ageref).html("OK (" + ds.ppsec() + " old)");
-						$(ageref).attr( "class", "status_stale120" );
+						$(ageref).attr("class", "status_stale120");
 					}
 				} else {
 					$(ageref).html("OK (" + ds.ppsec() + " old)");
-					$(ageref).attr( "class", "status_ok" );
+					$(ageref).attr("class", "status_ok");
 				}
 			}
 
-			$( countref ).html( count );
+			$(countref).html(count);
 			var count_check = document.getElementById(countref);
 
 			if (!isNaN(count)) {
@@ -175,13 +177,11 @@ function rebuildTable(state) {
 		}
 
 	}
-	$( "#totalregions" ).text( total_regions );
-	$( "#totalcount" ).text( total_mlat );
+	$("#totalregions").text(total_regions);
+	$("#totalcount").text(total_mlat);
 }
 
 
 function hasClass(element, cls) {
-	    return (' ' + element.className + ' ').indexOf(' ' + cls + ' ') > -1;
+	return (' ' + element.className + ' ').indexOf(' ' + cls + ' ') > -1;
 }
-
-
