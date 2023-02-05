@@ -72,7 +72,7 @@ function refresh() {
 	};
 
 	var cachebust = new Date().getTime();
-	xhr.open("GET", "/api/0/mlat-server/" + my_region + "/sync.json" + cachebust, true);
+	xhr.open("GET", "/api/0/mlat-server/" + my_region + "/sync.json?" + cachebust, true);
 	xhr.send();
 }
 
