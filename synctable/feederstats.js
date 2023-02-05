@@ -74,7 +74,7 @@ function doInit() {
 	// Ok, now we ajax call the json for the config, and then process it to see if this was actually a valid region number...
 
 	var getconf = $.ajax({
-		url: '/sync/mirror_regions.json',
+		url: '/synctable/mirror_regions.json',
 		timeout: 3000,
 		cache: true,
 		dataType: 'json'

@@ -33,7 +33,7 @@ function refresh() {
 	};
 
 	var cachebust = new Date().getTime();
-	xhr.open("GET", "/api/0/mlat-server/totalcount?" + cachebust, true);
+	xhr.open("GET", "/api/0/mlat-server/totalcount.json?" + cachebust, true);
 	xhr.send();
 
 }
