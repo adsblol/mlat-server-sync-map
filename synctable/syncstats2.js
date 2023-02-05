@@ -252,7 +252,7 @@ function rebuildTable(state) {
 
 		// Receiver
 		var celldata_r = document.createElement('td');
-		celldata_r.innerHTML = '<a href="/sync/feeder.html?' + my_region + '&' + encodeURIComponent(receivers[i]) + '" class="rowlink">' + receivers[i] + '</a>';
+		celldata_r.innerHTML = '<a href="/synctable/feeder.html?' + my_region + '&' + encodeURIComponent(receivers[i]) + '" class="rowlink">' + receivers[i] + '</a>';
 		celldata_r.className = "rec_name_td";
 		var status_class = "";
 		if (status_avg > 9.5) {

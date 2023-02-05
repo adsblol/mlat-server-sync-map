@@ -65,7 +65,7 @@ function doInit() {
 	document.title = feeder + ' (R' + region + ') MLAT';
 	$('#REGION').text(region);
 	$('#NAME').text(feeder);
-	var new_href = '/sync/' + region;
+	var new_href = '/synctable/' + region;
 	$('#GOBACK').attr('href', new_href);
 	//$( '#feederpeertable' ).trigger( 'updateHeaders');
 	//$( '#feederpeertable' ).trigger( 'update');
