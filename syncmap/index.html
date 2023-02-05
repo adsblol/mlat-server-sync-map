@@ -19,38 +19,39 @@
     <h1>adsb.lol MLAT feeder map</h1>
     <p class="note"><b>For privacy: locations are approximate</b></p>
     <p class="note"><b>For privacy: The adsblol feed client sends a privacy flag by default.
-        To disable it, run <code>adsblol-env set ADSBLOL_MLAT_PRIVACY false</code>
-        <div id="progressbar">
-          <p id="progresslabel" class="progresslabel">Loading...</p>
+        To disable it, run <code>adsblol-env set ADSBLOL_MLAT_PRIVACY false</code></b>
+    </p>
+    <div id="progressbar">
+      <p id="progresslabel" class="progresslabel">Loading...</p>
+    </div>
+    <div id="sidebar-content">
+      <p><b>Feeders are operated by people just like you.</b> For
+        information on how you can become a feeder, contribute data to
+        the this network,
+        <a href="https://adsb.lol/feed/" target="_blank">click here</a>.
+      </p>
+      <p>
+        Click or hover over a feeder on the map to see the peers it's
+        synchronized with for multilateration. Line color indicates
+        quality of the peer synchronization.
+      </p>
+      <input type="text" id="search-input" onkeyup="stationSearchHandler()" placeholder="Search for a feeder"
+        style="width: 100%">
+      <div id="stations-container">
+        <ul id="stations">
+        </ul>
+      </div>
+      <div id="station-info" class="hidden">
+        <h2> <span id="si-name">Feeder name</span></h2>
+        <div><span class="si-label" id="si-num-label"># synced peers:</span> <span id="si-num-peers">1000</span>
+          <span><a id="si-sync-stats-link">Sync stats</a></span>
         </div>
-        <div id="sidebar-content">
-          <p><b>Feeders are operated by people just like you.</b> For
-            information on how you can become a feeder, contribute data to
-            the this network,
-            <a href="https://adsb.lol/feed/" target="_blank">click here</a>.
-          </p>
-          <p>
-            Click or hover over a feeder on the map to see the peers it's
-            synchronized with for multilateration. Line color indicates
-            quality of the peer synchronization.
-          </p>
-          <input type="text" id="search-input" onkeyup="stationSearchHandler()" placeholder="Search for a feeder"
-            style="width: 100%">
-          <div id="stations-container">
-            <ul id="stations">
-            </ul>
-          </div>
-          <div id="station-info" class="hidden">
-            <h2> <span id="si-name">Feeder name</span></h2>
-            <div><span class="si-label" id="si-num-label"># synced peers:</span> <span id="si-num-peers">1000</span>
-              <span><a id="si-sync-stats-link">Sync stats</a></span>
-            </div>
-            <div><span class="si-label">Region:</span> <span id="si-region">region</span></div>
-            <div><span class="si-label">Closest peer:</span> <span id="si-closest-peer-dist">0</span></div>
-            <div><span class="si-label">Farthest peer:</span> <span id="si-farthest-peer-dist">0</span></div>
-            <div><span class="si-label">Approximate location:</span> <span id="si-peer-loc">0</span></div>
-          </div>
-        </div>
+        <div><span class="si-label">Region:</span> <span id="si-region">region</span></div>
+        <div><span class="si-label">Closest peer:</span> <span id="si-closest-peer-dist">0</span></div>
+        <div><span class="si-label">Farthest peer:</span> <span id="si-farthest-peer-dist">0</span></div>
+        <div><span class="si-label">Approximate location:</span> <span id="si-peer-loc">0</span></div>
+      </div>
+    </div>
   </div>
   <div id="map-container">
     <div id="map-canvas"></div>
