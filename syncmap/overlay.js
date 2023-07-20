@@ -65,6 +65,8 @@ function stationKey(regionId, stationId) {
 
 const regionMarkerColors = {
   "0A": "#8dd3c7",
+  "0B": "#1f78b4",
+  "0C": "#ff7f00",
   "1A": "#8dd3c7",
   "1B": "#1f78b4",
   "1C": "#ff7f00",
