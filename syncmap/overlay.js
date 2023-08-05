@@ -336,7 +336,7 @@ function selectStation(stationInfo) {
   $('#si-name').text(stationInfo.name);
   const region = stationInfo.region;
   const euc = encodeURIComponent;
-  const syncUrl = new URL(`/synctable/feeder.html?${euc(region)}&${euc(stationInfo.name)}`, 'https://map.adsb.lol/').toString();
+  const syncUrl = new URL(`/synctable/feeder.html?${euc(region)}&${euc(stationInfo.name)}`, 'https://mlat.adsb.lol/').toString();
   let regionInfo = region ? allRegionInfos.find(ri => ri.region === region) : null;
   if (regionInfo) {
     $('#si-region').text(`${regionInfo.name} (${region})`);
