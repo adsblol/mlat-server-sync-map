@@ -465,7 +465,6 @@ async function initialize() {
     lon: getHashParam('lon'),
     zoom: getHashParam('zoom') || 10,
   };
-  console.log('hashParams', hashParams);
   if (hashParams.lat && hashParams.lon && hashParams.zoom) {
     map.setView([hashParams.lat, hashParams.lon], hashParams.zoom);
   } else {
