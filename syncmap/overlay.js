@@ -434,7 +434,18 @@ async function loadAllStations(map) {
   return;
 }
 
-
+// function to get URL parameters after the # (so the server doesn't see them)
+function getHashParam(name) {
+  // from https://gist.github.com/heathcliff/7157933
+  var regex   = new RegExp("(#)("+name+")(\=)([^#]*)"),
+      matches = [];
+  matches = regex.exec(window.location.hash);
+  if (matches !== null && matches.length > 4 && matches[4] !== null) {
+      return matches[4];
+  } else {
+      return false;
+  }
+}
 async function initialize() {
   // Create map.
   map = L.map('map-canvas');
@@ -447,7 +458,20 @@ async function initialize() {
   });
   // Add the OSM layer to the map
   map.addLayer(osm);
-  map.fitWorld();
+
+  // if lat, lon, and zoom are specified after # in URL, use those
+  const hashParams = {
+    lat: getHashParam('lat'),
+    lon: getHashParam('lon'),
+    zoom: getHashParam('zoom') || 10,
+  };
+  console.log('hashParams', hashParams);
+  if (hashParams.lat && hashParams.lon && hashParams.zoom) {
+    map.setView([hashParams.lat, hashParams.lon], hashParams.zoom);
+  } else {
+    map.fitWorld();
+  }
+
   map.on('click', () => selectStation(null));
 
   // Load stations.
